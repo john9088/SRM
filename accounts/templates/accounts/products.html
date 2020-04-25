@@ -16,6 +16,13 @@
 							<th>Category</th>
 							<th>Price</th>
 						</tr>
+						{%for i in products %} <!-- To use Outhon for loop or any python function. -->
+							<tr>
+								<td>{{i.name}}</td> <!-- To access data. -->
+								<td>{{i.category}}</td>
+								<td>{{i.price}}</td>
+							</tr>
+						{% endfor %}
 						
 					</table>
 				</div>
