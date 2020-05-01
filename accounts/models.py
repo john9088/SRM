@@ -50,3 +50,5 @@ class Order(models.Model):
 	products = models.ForeignKey(Product, null = True, on_delete = models.SET_NULL) #Order inherits from products and on deleting the product the order remains with null value currosponding to the deleted product
 	date_created = models.DateTimeField(auto_now_add = True) 
 	status = models.CharField(max_length = 200, null = True, choices = STATUS)
+	def __str__(self):
+		return self.products.name

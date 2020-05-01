@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import *
+from .forms import *
 
 # Create your views here.
 def home(request):
@@ -28,3 +29,40 @@ def customer(request,cust_key):
 def products(request):
 	products = Product.objects.all()
 	return render(request, 'accounts/products.html',{'products':products})
+
+def createOrder(request):
+
+	form = OrderForm()
+	if request.method == 'POST':
+		form = OrderForm(request.POST) #request.POST contains all the data passed from the form
+		#print(f"***DATA:{request.POST}***")
+		if form.is_valid():
+			form.save()
+			return redirect('/accounts/')
+
+	content = {'form':form}
+
+	return render(request,'accounts/order_form.html',content)
+
+def	updateOrder(request,order_key):
+	
+	
+	order = Order.objects.get(id=order_key)
+	form = OrderForm(instance = order) #To save the content of the from as data obtained from order
+
+	if request.method == 'POST':
+		form = OrderForm(request.POST, instance = order) #request.POST contains all the data passed from the form
+		#print(f"***DATA:{request.POST}***")			 #on passing instance=order it saves all the data to current POST request and does not create a new POST request 	
+		if form.is_valid():
+			form.save()
+			return redirect('/accounts/')
+	content = {'form':form}
+	return render(request,'accounts/order_form.html',content)
+
+def deleteOrder(request,order_key):
+	item = Order.objects.get(id=order_key)
+	if request.method == 'POST':
+		item.delete()
+		return redirect('/accounts/')
+	content = {'item':item}
+	return render(request,'accounts/delete.html',content) 
